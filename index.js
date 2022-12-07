@@ -2,15 +2,21 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import router from './routes/users.js'
-
 import mongoose from 'mongoose'
-
 import homeRoute from './routes/home.js'
 import dotenv from 'dotenv'
 dotenv.config()
 const app = express()
 app.use(cors())
 
+app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+//connect with database
 mongoose
 .connect(process.env.MONGO_URL)
 .then(()=>{
@@ -29,10 +35,10 @@ app.use('/users', cors(), router)
 
 
 
-const port= process.env.PORT || 7000
+const port= process.env.PORT
 
 
-//app port ...
+//app port ...hghg
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`)
