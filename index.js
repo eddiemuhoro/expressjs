@@ -7,7 +7,14 @@ import homeRoute from './routes/home.js'
 import dotenv from 'dotenv'
 dotenv.config()
 const app = express()
-app.use(cors())
+app.use(cors(
+    {
+        origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']
+        
+    }
+))
 
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
