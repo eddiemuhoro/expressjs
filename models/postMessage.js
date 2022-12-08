@@ -4,22 +4,32 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema(
     {
        
-        name:{
+        title:{
             type: String,
             required: true ['insert text!!']
         },
-        email:{
+        description:{
             type: String,
             required: true
         },
-        phone: {
+        employer: {
+            type: String,
+            required: true
+        },
+        location: {
+            type: String,
+            required: true
+        },
+        salary:{
             type: Number,
-            required: true
-        },
-        message: {
-            type: String,
-            required: true
 
+        },
+        imageurl:{
+            type: String
+        },
+        isClaimed:{
+            type: Boolean,
+            default: false
         }
     },
     {
