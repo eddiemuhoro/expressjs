@@ -1,7 +1,8 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import router from './routes/users.js'
+import router from './routes/jobs.js'
+import routerLogin from './routes/users.js'
 import mongoose from 'mongoose'
 import homeRoute from './routes/home.js'
 import dotenv from 'dotenv'
@@ -12,7 +13,6 @@ app.use(cors(
         origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']
-        
     }
 ))
 
@@ -39,13 +39,9 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
   
 app.use('/',homeRoute)
 app.use('/users', cors(), router)
+app.use('/login',cors(),routerLogin)
 
-
-
-const port= process.env.PORT
-
-
-//app port ...hghg
+const port= process.env.PORT || 4000
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`)

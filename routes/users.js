@@ -1,56 +1,47 @@
 import express from 'express'
-import PostMessage from '../models/postMessage.js'
-const router =express.Router()
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+import asyncHandler from 'express-async-handler'
+import User from '../models/registerUsers.js'
 
-//CREATE USER
-//REQ.BODY TO GET DATA FROM THE CLIENT
-router.post('/new', async (req, res)=>{
-    const post = req.body
-    const newPost = new PostMessage(post)
+const router = express.Router()
 
-    
-    try {
-        newPost.save()
-    } catch (error) {
-        console.log('error');
+router.post('/', asyncHandler( async (req, res)=>{
+    const {name, email, password} = req.body
+
+    if(!name || !email || !password){
+        res.status(400)
+        res.send('Please fill all the fields')
     }
- 
-})
-//GET ALL USERS
-//.FIND() TO GET ALL USERS FROM MONGOOSE SCHEMA
-
-router.get('/', async (req, res)=>{
-    try {
-        const getData = await  PostMessage.find();
-        res.json(getData)
-    } catch (error) {
-        console.log(error);
+    const userExists = await User.findOne({email})
+    if(userExists){
+        res.status(400)
+        res.send('User already exists')
     }
-})
+    //hash password
 
 
-//simplified code
-router.route('/:id').get((req, res)=>{
-    res.send(`individual user with id ${req.params.id}`)
-}).put( async(req, res)=>{
-    const data = await PostMessage.findById(req.params.id)
-    if(!data){
-        console.log("no data found");
-        res.status(400).send("No data found")
+    const user = await User.create({
+        name,
+        email,
+        password
+    })
+    if(user){
+        res.status(201).json(
+            {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+            }
+        )
+    }else{
+        res.status(400)
+        res.send('Invalid user data')
     }
-    const updatedData = await PostMessage.findByIdAndUpdate(req.params.id, 
-        req.body, {
-            new: true
-        })
-    res.json(updatedData)
-}).delete( async (req, res)=>{
-    const data = await PostMessage.findById(req.params.id)
-    if(!data){
-        console.log("no data found");
-        res.status(400).send("Oops no data found")
-    }
-    data.remove()
-    res.send(`Deleted user with id ${req.params.id}`)
-})
+}))
+
+router.get('/me',asyncHandler (async (req, res)=>{
+    res.send('My details')
+}))
 
 export default router
