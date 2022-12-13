@@ -38,8 +38,8 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 
   
 app.use('/',homeRoute)
-app.use('/users', cors(), router)
-app.use('/login',cors(),routerLogin)
+app.use('/jobs', cors(), router)
+app.use('/', routerLogin)
 
 const port= process.env.PORT || 4000
 
