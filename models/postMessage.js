@@ -5,32 +5,37 @@ const schema = mongoose.Schema(
     {
         user:{
             type: mongoose.Schema.Types.ObjectId,
+            required: true,
             ref: 'User'
         },
+        
        
         title:{
             type: String,
-            required: true ['insert text!!']
+            default:'hello'
         },
         description:{
             type: String,
-            required: true
+            default:'hello'
         },
         employer: {
             type: String,
-            required: true
+            default:'hello'
         },
         location: {
             type: String,
-            required: true
+            default:'hello'
         },
         salary:{
             type: Number,
+            default: 78
 
         },
         imageurl:{
-            type: String
+            type: String,
+            default: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/University-of-Alabama-EngineeringResearchCenter-01.jpg'
         },
+       
         isClaimed:{
             type: Boolean,
             default: false

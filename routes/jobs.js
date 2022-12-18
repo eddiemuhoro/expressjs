@@ -5,7 +5,7 @@ const router =express.Router()
 import User from '../models/registerUsers.js'
 //CREATE USER
 //REQ.BODY TO GET DATA FROM THE CLIENT
-router.post('/new',protect, async (req, res)=>{
+router.post('/new', protect, async (req, res)=>{
     const {title, description, employer, location, salary, imageurl} = req.body
     const newPost = new PostMessage({
         title,
@@ -27,14 +27,28 @@ router.post('/new',protect, async (req, res)=>{
 //GET ALL USERS
 //.FIND() TO GET ALL USERS FROM MONGOOSE SCHEMA
 
-router.get('/', protect, async (req, res)=>{
+router.get('/', async (req, res)=>{
     try {
-        const getData = await  PostMessage.find({user: req.user._id});
+        const getData = await  PostMessage.find();
+
+        
         res.json(getData)
     } catch (error) {
         console.log(error);
     }
 })
+
+router.get('/mypost',protect,  async(req, res)=>{
+    const user = await User.findById(req.user._id)
+    //check if user is logged in
+    if(!user){
+        console.log("no user found");
+        res.status(401).send("No user found")
+    }
+    const myPost = await PostMessage.find({user: req.user._id})
+    res.json(myPost)
+}
+)
 
 
 //simplified code
@@ -78,11 +92,8 @@ router.route('/:id').get((req, res)=>{
         res.status(401).send("No user found")
     } 
     //logged in user matches the user who created the post
-    if(data.user.toString() !== user._id.toString()){
-        console.log("not authorized");
-        res.status(401).send("Not authorized")
-    }
-    
+
+  
     
     data.remove()
     res.send(`Deleted user with id ${req.params.id}`)

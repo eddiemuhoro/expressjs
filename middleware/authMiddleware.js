@@ -10,6 +10,7 @@ export const protect = asyncHandler(async(req, res, next)=>{
         try{
             token = req.headers.authorization.split(' ')[1]
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
+            //(decoded.id) is the id of the user that is passed to the token at the time of login
             req.user = await User.findById(decoded.id).select('-password')
             if(!req.user){
                 res.status(401)
