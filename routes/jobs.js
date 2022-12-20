@@ -54,23 +54,11 @@ router.get('/mypost',protect,  async(req, res)=>{
 //simplified code
 router.route('/:id').get((req, res)=>{
     res.send(`individual user with id ${req.params.id}`)
-}).put(protect, async(req, res)=>{
+}).put( async(req, res)=>{
     const data = await PostMessage.findById(req.params.id)
     if(!data){
         console.log("no data found");
         res.status(400).send("No data found")
-    }
-
-    const user = await User.findById(req.user._id)
-    //check if user is logged in
-    if(!user){
-        console.log("no user found");
-        res.status(401).send("No user found")
-    } 
-    //logged in user matches the user who created the post
-    if(data.user.toString() !== user._id.toString()){
-        console.log("not authorized");
-        res.status(401).send("Not authorized")
     }
 
     const updatedData = await PostMessage.findByIdAndUpdate(req.params.id, 
