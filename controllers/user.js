@@ -13,7 +13,7 @@ export const getUser = asyncHandler(async (req, res) => {
 })
 
 export const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body
+    const { name, email, password , selectedFile} = req.body
     const userExists = await User.findOne({ email })    
     if (userExists) {
         res.status(400)
@@ -24,7 +24,8 @@ export const registerUser = asyncHandler(async (req, res) => {
     const user = await User.create({
         name,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        selectedFile
     })
 
     if (user) {
@@ -33,7 +34,10 @@ export const registerUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             //the id is passed to the generateToken function
-            token: generateToken(user._id)
+            token: generateToken(user._id),
+            selectedFile: user.selectedFile
+
+             
          
         })} else {
             res.status(400)
@@ -53,7 +57,8 @@ export const registerUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            token: generateToken(user._id)
+            token: generateToken(user._id),
+            selectedFile: user.selectedFile
         })
     }else{
         res.status(400)

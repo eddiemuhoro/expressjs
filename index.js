@@ -16,13 +16,13 @@ app.use(cors(
     }
 ))
 
-// app.use(function(req, res, next) {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//     res.setHeader('Access-Control-Allow-Credentials', true);
-//     next();
-// });
+app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
 //connect with database
 mongoose
 .connect(process.env.MONGO_URL)
@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
   
 app.use('/',homeRoute)
 app.use('/jobs', cors(), router)
-app.use('/', routerLogin)
+app.use('/',cors(), routerLogin)
 
 const port= process.env.PORT || 4000
 

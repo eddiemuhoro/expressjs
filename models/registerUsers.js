@@ -14,7 +14,9 @@ const loginSchema = mongoose.Schema(
             type: String,
             required: true
         },
-         
+         selectedFile: {
+            type: String,
+        },
       
         date: {
             type: Date,
