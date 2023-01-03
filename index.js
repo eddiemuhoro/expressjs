@@ -41,7 +41,7 @@ app.use('/',homeRoute)
 app.use('/jobs', cors(), router)
 app.use('/',cors(), routerLogin)
 
-const port= process.env.PORT || 4000
+const port= 4000
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`)

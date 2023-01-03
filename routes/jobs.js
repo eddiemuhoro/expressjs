@@ -80,9 +80,6 @@ router.route('/:id').get((req, res)=>{
         res.status(401).send("No user found")
     } 
     //logged in user matches the user who created the post
-
-  
-    
     data.remove()
     res.send(`Deleted user with id ${req.params.id}`)
 })
