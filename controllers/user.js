@@ -39,6 +39,7 @@ export const registerUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            phoneNum: user.phoneNum,
             //the id is passed to the generateToken function
             token: generateToken(user._id),
             selectedFile: user.selectedFile
