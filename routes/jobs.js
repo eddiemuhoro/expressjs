@@ -6,11 +6,12 @@ import User from '../models/registerUsers.js'
 //CREATE USER
 //REQ.BODY TO GET DATA FROM THE CLIENT
 router.post('/new', protect, async (req, res)=>{
-    const {title, description, employer, location, salary, imageurl} = req.body
+    const {title, description, employer, phone,  location, salary, imageurl} = req.body
     const newPost = new PostMessage({
         title,
         description,
         employer,
+        phone,
         location,
         salary,
         imageurl,

@@ -33,7 +33,7 @@ const loginSchema = mongoose.Schema(
             type: Date,
             required: false
         },
-      
+
         date: {
             type: Date,
             default: Date.now

@@ -22,6 +22,10 @@ const schema = mongoose.Schema(
             type: String,
             default:'hello'
         },
+        phone:{
+            type: String,
+            required: true
+        },
         location: {
             type: String,
             default:'hello'
