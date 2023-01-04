@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 //
 const schema = mongoose.Schema(
     {
-        user:{
+        employer:{
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: 'User'
+            ref: 'Employer'
         },
         
        

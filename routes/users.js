@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import asyncHandler from 'express-async-handler'
 import User from '../models/registerUsers.js'
-import { getUser, loginUser, registerUser, sendResetPasswordEmail } from '../controllers/user.js'
+import { getUser, loginEmployer, loginUser, registerEmployer, registerUser, sendResetPasswordEmail } from '../controllers/user.js'
 import { protect } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
@@ -12,7 +12,9 @@ const router = express.Router()
 
 
 router.post('/register', registerUser)
+router.post('/registerEmployer', registerEmployer)
 router.post('/login', loginUser)
+router.post('/loginEmployer', loginEmployer)
 router.get('/me',protect ,getUser)
 router.post('/forgot_password', sendResetPasswordEmail)
 router.put('/resetpassword/:id', async(req, res)=>{

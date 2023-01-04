@@ -5,6 +5,7 @@ import asyncHandler from 'express-async-handler'
 import User from '../models/registerUsers.js'
 import sgMail from '@sendgrid/mail'
 import dotenv from 'dotenv'
+import Employer from '../models/employer.js'
 dotenv.config()
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -54,6 +55,43 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   })
 
+
+  export const registerEmployer = asyncHandler(async (req, res) => {
+    const { name, email, password, phoneNum, selectedFile} = req.body
+    const employerExists = await Employer.findOne({ email })    
+    if (employerExists) {
+        res.status(400)
+        res.send('Employer already exists')
+    }
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+    const employer = await Employer.create({
+        name,
+        email,
+        password: hashedPassword,
+        phoneNum,
+        selectedFile
+    })
+
+    if (employer) {
+        res.status(201).json({
+            _id: employer._id,
+            name: employer.name,
+            email: employer.email,
+           
+            //the id is passed to the generateToken function
+            token: generateToken(employer._id),
+            phoneNum: employer.phoneNum,
+            selectedFile: employer.selectedFile
+        })} else {
+            res.status(400)
+            res.send('Invalid employer data')
+        }
+
+  })
+
+
+
   export const loginUser= asyncHandler(async(req, res)=>{
     const {email, password} = req.body
 
@@ -76,6 +114,31 @@ export const registerUser = asyncHandler(async (req, res) => {
 
     res.json({message: 'login user'})
   })
+
+//employers login
+  export const loginEmployer= asyncHandler(async(req, res)=>{
+    const {email, password} = req.body
+
+    const employer= await Employer.findOne({email})
+
+    //check password
+    if(employer && (await bcrypt.compare(password, employer.password))){
+        res.json({
+            _id: employer._id,
+            name: employer.name,
+            email: employer.email,
+            token: generateToken(employer._id),
+            phoneNum: employer.phoneNum,
+            selectedFile: employer.selectedFile
+        })
+    }else{
+        res.status(400)
+            res.send('Invalid employer credentials')
+    }
+
+    res.json({message: 'login employer'})
+  })
+
 
   export const generateToken= (id) =>{
     return jwt.sign({id}, process.env.JWT_SECRET, { expiresIn: '30d'})

@@ -1,11 +1,12 @@
 import express from 'express'
-import { protect } from '../middleware/authMiddleware.js'
+import { protect, protectEmployer } from '../middleware/authMiddleware.js'
 import PostMessage from '../models/postMessage.js'
 const router =express.Router()
 import User from '../models/registerUsers.js'
+import Employer from '../models/employer.js'
 //CREATE USER
 //REQ.BODY TO GET DATA FROM THE CLIENT
-router.post('/new', protect, async (req, res)=>{
+router.post('/new', protectEmployer, async (req, res)=>{
     const {title, description, employer, phone,  location, salary, imageurl} = req.body
     const newPost = new PostMessage({
         title,
@@ -15,7 +16,7 @@ router.post('/new', protect, async (req, res)=>{
         location,
         salary,
         imageurl,
-        user: req.user._id
+        employer: req.employer._id
     })
     try {
         await newPost.save();
@@ -39,14 +40,14 @@ router.get('/', async (req, res)=>{
     }
 })
 
-router.get('/mypost',protect,  async(req, res)=>{
-    const user = await User.findById(req.user._id)
+router.get('/mypost',protectEmployer,  async(req, res)=>{
+    const employer = await Employer.findById(req.employer._id)
     //check if user is logged in
-    if(!user){
-        console.log("no user found");
-        res.status(401).send("No user found")
+    if(!employer){
+        console.log("no employer found");
+        res.status(401).send("No employer found")
     }
-    const myPost = await PostMessage.find({user: req.user._id})
+    const myPost = await PostMessage.find({employer: req.employer._id})
     res.json(myPost)
 }
 )
