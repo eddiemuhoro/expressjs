@@ -18,13 +18,13 @@ const schema = mongoose.Schema(
             type: String,
             default:'hello'
         },
-        employer: {
+        name: {
             type: String,
             default:'hello'
         },
         phone:{
             type: String,
-            required: true
+            default:'hello'
         },
         location: {
             type: String,

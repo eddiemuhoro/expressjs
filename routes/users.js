@@ -5,6 +5,7 @@ import asyncHandler from 'express-async-handler'
 import User from '../models/registerUsers.js'
 import { getUser, loginEmployer, loginUser, registerEmployer, registerUser, sendResetPasswordEmail } from '../controllers/user.js'
 import { protect } from '../middleware/authMiddleware.js'
+import Employer from '../models/employer.js'
 
 const router = express.Router()
 
@@ -37,5 +38,14 @@ router.get('/users', async(req, res)=>{
         }
     }
 )
+
+router.get('/employers', async(req, res)=>{
+    try {
+        const getData = await  Employer.find();
+        res.json(getData)
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 export default router

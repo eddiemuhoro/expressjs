@@ -7,11 +7,11 @@ import Employer from '../models/employer.js'
 //CREATE USER
 //REQ.BODY TO GET DATA FROM THE CLIENT
 router.post('/new', protectEmployer, async (req, res)=>{
-    const {title, description, employer, phone,  location, salary, imageurl} = req.body
+    const {title, description, name, phone,  location, salary, imageurl} = req.body
     const newPost = new PostMessage({
         title,
         description,
-        employer,
+        name,
         phone,
         location,
         salary,
@@ -49,9 +49,13 @@ router.get('/mypost',protectEmployer,  async(req, res)=>{
     }
     const myPost = await PostMessage.find({employer: req.employer._id})
     res.json(myPost)
-}
-)
+})
 
+router.get('/employer', async(req, res)=>{
+    const employer = await Employer.findById(req.employer._id)
+    const employerInfo = await Employer.find({employer: req.employer._id})
+    res.json(employerInfo)
+})
 
 //simplified code
 router.route('/:id').get((req, res)=>{
@@ -68,22 +72,22 @@ router.route('/:id').get((req, res)=>{
             new: true
         })
     res.json(updatedData)
-}).delete(protect, async (req, res)=>{
+}).delete(protectEmployer, async (req, res)=>{
     const data = await PostMessage.findById(req.params.id)
     if(!data){
         console.log("no data found");
         res.status(400).send("Oops no data found")
     }
 
-    const user = await User.findById(req.user._id)
+    const employer = await Employer.findById(req.employer._id)
     //check if user is logged in
-    if(!user){
+    if(!employer){
         console.log("no user found");
         res.status(401).send("No user found")
     } 
     //logged in user matches the user who created the post
     data.remove()
-    res.send(`Deleted user with id ${req.params.id}`)
+    res.send(`Deleted job with id ${req.params.id}`)
 })
 
 export default router
