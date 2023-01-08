@@ -1,5 +1,6 @@
 import express from 'express'
 import { protect, protectEmployer } from '../middleware/authMiddleware.js'
+import jwt from 'jsonwebtoken'
 import PostMessage from '../models/postMessage.js'
 const router =express.Router()
 import User from '../models/registerUsers.js'
@@ -8,7 +9,7 @@ import Employer from '../models/employer.js'
 //REQ.BODY TO GET DATA FROM THE CLIENT
 router.post('/new', protectEmployer, async (req, res)=>{
     const {title, description, name, phone,  location, salary, imageurl} = req.body
-    const newPost = new PostMessage({
+    const job = await PostMessage.create({
         title,
         description,
         name,
@@ -16,24 +17,46 @@ router.post('/new', protectEmployer, async (req, res)=>{
         location,
         salary,
         imageurl,
-        employer: req.employer._id
+        employer: req.employer._id,
+
     })
-    try {
-        await newPost.save();
-        res.status(201).json(newPost)
-    } catch (error) {
-        console.log(error);
-    }
+
+    if (job) {
+        var token = generateToken(job._id)
+        res.status(201).json({
+            _id: job._id,
+            title: job.title,
+            description: job.description,
+            name: job.name,
+            phone: job.phone,
+            location: job.location,
+            salary: job.salary,
+            imageurl: job.imageurl,
+            employer: job.employer,
+            //the id is passed to the generateToken function
+           
+            
+        })} else {
+            res.status(400)
+            res.send('Invalid user data')
+        }
+
+
+   
 }
 )
+
+
+export const generateToken= (id) =>{
+    return jwt.sign({id}, process.env.JWT_SECRET, { expiresIn: '30d'})
+  }
+
 //GET ALL USERS
 //.FIND() TO GET ALL USERS FROM MONGOOSE SCHEMA
 
 router.get('/', async (req, res)=>{
     try {
         const getData = await  PostMessage.find();
-
-        
         res.json(getData)
     } catch (error) {
         console.log(error);
@@ -41,15 +64,10 @@ router.get('/', async (req, res)=>{
 })
 
 router.get('/mypost',protectEmployer,  async(req, res)=>{
-    const employer = await Employer.findById(req.employer._id)
-    //check if user is logged in
-    if(!employer){
-        console.log("no employer found");
-        res.status(401).send("No employer found")
-    }
     const myPost = await PostMessage.find({employer: req.employer._id})
     res.json(myPost)
-})
+    }
+)
 
 router.get('/employer', async(req, res)=>{
     const employer = await Employer.findById(req.employer._id)

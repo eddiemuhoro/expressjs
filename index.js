@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import router from './routes/jobs.js'
 import routerLogin from './routes/users.js'
+import routerMessage from './routes/message.js'
 import mongoose from 'mongoose'
 import homeRoute from './routes/home.js'
 import dotenv from 'dotenv'
@@ -39,6 +40,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
   
 app.use('/',homeRoute)
 app.use('/jobs', cors(), router)
+app.use('/', cors(), routerMessage)
 app.use('/',cors(), routerLogin)
 
 const port= 4000 || process.env.PORT

@@ -39,6 +39,7 @@ router.get('/users', async(req, res)=>{
     }
 )
 
+
 router.get('/employers', async(req, res)=>{
     try {
         const getData = await  Employer.find();

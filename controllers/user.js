@@ -11,10 +11,9 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 
 export const getUser = asyncHandler(async (req, res) => {
-    const userId = req.user.id
-    const {_id, name, email} = await User.findById(userId)
    res.status(200).json(req.user)
-})
+}
+)
 
 export const getEmployer = asyncHandler(async (req, res) => {
     const employerId = req.employer.id

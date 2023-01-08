@@ -8,8 +8,6 @@ const schema = mongoose.Schema(
             required: true,
             ref: 'Employer'
         },
-        
-       
         title:{
             type: String,
             default:'hello'
@@ -33,13 +31,12 @@ const schema = mongoose.Schema(
         salary:{
             type: Number,
             default: 78
-
         },
         imageurl:{
             type: String,
             default: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/University-of-Alabama-EngineeringResearchCenter-01.jpg'
         },
-       
+        
         isClaimed:{
             type: Boolean,
             default: false

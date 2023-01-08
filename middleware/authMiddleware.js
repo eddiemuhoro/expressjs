@@ -3,6 +3,8 @@ import User from '../models/registerUsers.js'
 import Employer from '../models/employer.js'
 import asyncHandler from 'express-async-handler'
 import jwt from 'jsonwebtoken'
+import PostMessage from '../models/postMessage.js'
+import Message from '../models/message.js'
 
 export const protect = asyncHandler(async(req, res, next)=>{
     let token;
@@ -42,6 +44,35 @@ export const protectEmployer = asyncHandler(async(req, res, next)=>{
             if(!req.employer){
                 res.status(401)
                 res.json({message:'Not authorized, no employer found'})
+            }
+            next()
+        }catch(error){
+            console.error(error)
+            res.status(401)
+            res.json({message:'Not authorized'})
+        }
+    }
+    if(!token){
+        res.status(401)
+        res.json({message:'Not authorized, no token'})
+    }
+})
+
+
+
+
+export const protectJob = asyncHandler(async(req, res, next)=>{
+    let token;
+
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        try{
+            token = req.headers.authorization.split(' ')[1]
+            const decoded = jwt.verify(token, process.env.JWT_SECRET)
+            //(decoded.id) is the id of the user that is passed to the token at the time of login
+            req.job = await PostMessage.findById(decoded.id).select('-password')
+            if(!req.job){
+                res.status(401)
+                res.json({message:'Not authorized, no job found'})
             }
             next()
         }catch(error){
