@@ -22,7 +22,7 @@ router.post('/new', protectEmployer, async (req, res)=>{
     })
 
     if (job) {
-        var token = generateToken(job._id)
+       
         res.status(201).json({
             _id: job._id,
             title: job.title,
@@ -78,7 +78,7 @@ router.get('/employer', async(req, res)=>{
 //simplified code
 router.route('/:id').get((req, res)=>{
     res.send(`individual user with id ${req.params.id}`)
-}).put( async(req, res)=>{
+}).put(  async(req, res)=>{
     const data = await PostMessage.findById(req.params.id)
     if(!data){
         console.log("no data found");
