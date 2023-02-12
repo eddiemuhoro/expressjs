@@ -2,18 +2,20 @@ import mongoose from "mongoose";
 
 const messageSchema = mongoose.Schema(
     {
-       
-        job:{
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: 'Employer'
-        },
-        
-      
-        message:{
+        description:{
             type: String,
-            default:'hello'
+            required: true,
         },
+        name:{
+            type: String,
+        },
+        user:[{
+            type: mongoose.Schema.Types.ObjectId,
+            default: null,
+            ref: 'User'
+        }],
+   
+        
     }
 )
 
