@@ -16,7 +16,7 @@ const schema = mongoose.Schema(
             type: String,
             default:'hello'
         },
-        name: {
+        employer: {
             type: String,
             default:'hello'
         },
